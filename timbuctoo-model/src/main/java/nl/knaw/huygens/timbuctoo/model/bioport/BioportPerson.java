@@ -1,6 +1,7 @@
 package nl.knaw.huygens.timbuctoo.model.bioport;
 
 import nl.knaw.huygens.timbuctoo.model.Person;
+import nl.knaw.huygens.timbuctoo.model.util.Datable;
 
 public class BioportPerson extends Person {
 
@@ -17,14 +18,14 @@ public class BioportPerson extends Person {
   private String bioportId;
   private String initial;
 
-  private String birthday;
-  private String geboortedatum;
-  private String geboortejaar;
-  private String geboortedatumMin;
-  private String geboortedatumMax;
+  private String birthday; // coded as mmdd (no year!)
+  private Datable geboortedatum;
+  private Datable geboortejaar;
+  private Datable geboortedatumMin;
+  private Datable geboortedatumMax;
   private String geboorteplaats;
 
-  private String deathday;
+  private String deathday; // coded as mmdd (no year!)
   private String sterfdatum;
   private String sterfjaar;
   private String sterfdatumMin;
@@ -133,35 +134,35 @@ public class BioportPerson extends Person {
     this.geboorteplaats = geboorteplaats;
   }
 
-  public String getGeboortedatumMax() {
+  public Datable getGeboortedatumMax() {
     return geboortedatumMax;
   }
 
-  public void setGeboortedatumMax(String geboortedatumMax) {
+  public void setGeboortedatumMax(Datable geboortedatumMax) {
     this.geboortedatumMax = geboortedatumMax;
   }
 
-  public String getGeboortedatumMin() {
+  public Datable getGeboortedatumMin() {
     return geboortedatumMin;
   }
 
-  public void setGeboortedatumMin(String geboortedatumMin) {
+  public void setGeboortedatumMin(Datable geboortedatumMin) {
     this.geboortedatumMin = geboortedatumMin;
   }
 
-  public String getGeboortejaar() {
+  public Datable getGeboortejaar() {
     return geboortejaar;
   }
 
-  public void setGeboortejaar(String geboortejaar) {
+  public void setGeboortejaar(Datable geboortejaar) {
     this.geboortejaar = geboortejaar;
   }
 
-  public String getGeboortedatum() {
+  public Datable getGeboortedatum() {
     return geboortedatum;
   }
 
-  public void setGeboortedatum(String geboortedatum) {
+  public void setGeboortedatum(Datable geboortedatum) {
     this.geboortedatum = geboortedatum;
   }
 
