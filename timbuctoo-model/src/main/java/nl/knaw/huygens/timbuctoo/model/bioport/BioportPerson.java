@@ -26,10 +26,10 @@ public class BioportPerson extends Person {
   private String geboorteplaats;
 
   private String deathday; // coded as mmdd (no year!)
-  private String sterfdatum;
-  private String sterfjaar;
-  private String sterfdatumMin;
-  private String sterfdatumMax;
+  private Datable sterfdatum;
+  private Datable sterfjaar;
+  private Datable sterfdatumMin;
+  private Datable sterfdatumMax;
   private String sterfplaats;
 
   //private String gender
@@ -39,10 +39,11 @@ public class BioportPerson extends Person {
   private boolean invisible;
   private boolean orphan;
 
-  public String getSterfdatumMin() {
+  public Datable getSterfdatumMin() {
     return sterfdatumMin;
   }
-  public void setSterfdatumMin(String sterfdatumMin) {
+
+  public void setSterfdatumMin(Datable sterfdatumMin) {
     this.sterfdatumMin = sterfdatumMin;
   }
 
@@ -94,27 +95,27 @@ public class BioportPerson extends Person {
     this.sterfplaats = sterfplaats;
   }
 
-  public String getSterfdatumMax() {
+  public Datable getSterfdatumMax() {
     return sterfdatumMax;
   }
 
-  public void setSterfdatumMax(String sterfdatumMax) {
+  public void setSterfdatumMax(Datable sterfdatumMax) {
     this.sterfdatumMax = sterfdatumMax;
   }
 
-  public String getSterfjaar() {
+  public Datable getSterfjaar() {
     return sterfjaar;
   }
 
-  public void setSterfjaar(String sterfjaar) {
+  public void setSterfjaar(Datable sterfjaar) {
     this.sterfjaar = sterfjaar;
   }
 
-  public String getSterfdatum() {
+  public Datable getSterfdatum() {
     return sterfdatum;
   }
 
-  public void setSterfdatum(String sterfdatum) {
+  public void setSterfdatum(Datable sterfdatum) {
     this.sterfdatum = sterfdatum;
   }
 
