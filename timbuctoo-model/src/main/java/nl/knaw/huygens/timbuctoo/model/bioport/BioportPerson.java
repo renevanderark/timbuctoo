@@ -1,5 +1,6 @@
 package nl.knaw.huygens.timbuctoo.model.bioport;
 
+import nl.knaw.huygens.timbuctoo.facet.IndexAnnotation;
 import nl.knaw.huygens.timbuctoo.model.Person;
 import nl.knaw.huygens.timbuctoo.model.util.Datable;
 
@@ -14,7 +15,7 @@ public class BioportPerson extends Person {
   private String thumbnail;
   private String status;
   private String remarks;
-  private String timestamp;
+  private Datable timestamp;
   private String bioportId;
   private String initial;
 
@@ -183,6 +184,7 @@ public class BioportPerson extends Person {
     this.initial = initial;
   }
 
+  @IndexAnnotation(fieldName = "dynamic_s_bioportId", isFaceted = false)
   public String getBioportId() {
     return bioportId;
   }
@@ -191,11 +193,11 @@ public class BioportPerson extends Person {
     this.bioportId = bioportId;
   }
 
-  public String getTimestamp() {
+  public Datable getTimestamp() {
     return timestamp;
   }
 
-  public void setTimestamp(String timestamp) {
+  public void setTimestamp(Datable timestamp) {
     this.timestamp = timestamp;
   }
 
@@ -255,6 +257,7 @@ public class BioportPerson extends Person {
     this.geslachtsnaam = geslachtsnaam;
   }
 
+  @IndexAnnotation(fieldName = "dynamic_s_naam", isFaceted = true, canBeEmpty = true)
   public String getNaam() {
     return naam;
   }
