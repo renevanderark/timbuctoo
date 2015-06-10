@@ -99,6 +99,11 @@
       <version>1.46.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>nl.knaw.huygens</groupId>
+      <artifactId>datables</artifactId>
+      <version>1.0.2</version>
+    </dependency>
     <!-- ## End of test dependencies ## -->
   </dependencies>
 

@@ -1,8 +1,8 @@
 package nl.knaw.huygens.timbuctoo.model.bioport;
 
+import nl.knaw.huygens.datable.Datable;
 import nl.knaw.huygens.timbuctoo.facet.IndexAnnotation;
 import nl.knaw.huygens.timbuctoo.model.Person;
-import nl.knaw.huygens.timbuctoo.model.util.Datable;
 
 public class BioportPerson extends Person {
 
