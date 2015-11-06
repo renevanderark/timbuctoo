@@ -24,33 +24,44 @@ package nl.knaw.huygens.timbuctoo.rest.util.search;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.tinkerpop.blueprints.Graph;
+import com.tinkerpop.blueprints.Vertex;
 import nl.knaw.huygens.timbuctoo.Repository;
 import nl.knaw.huygens.timbuctoo.config.TypeNames;
 import nl.knaw.huygens.timbuctoo.model.DomainEntity;
 import nl.knaw.huygens.timbuctoo.model.DomainEntityDTO;
+import nl.knaw.huygens.timbuctoo.model.Entity;
 import nl.knaw.huygens.timbuctoo.model.RegularSearchResultDTO;
 import nl.knaw.huygens.timbuctoo.model.SearchResult;
 import nl.knaw.huygens.timbuctoo.rest.util.HATEOASURICreator;
 import nl.knaw.huygens.timbuctoo.rest.util.RangeHelper;
 import nl.knaw.huygens.timbuctoo.search.FullTextSearchFieldFinder;
 import nl.knaw.huygens.timbuctoo.search.SortableFieldFinder;
+import nl.knaw.huygens.timbuctoo.storage.graph.ConversionException;
+import nl.knaw.huygens.timbuctoo.storage.graph.tinkerpop.VertexConverter;
+import nl.knaw.huygens.timbuctoo.storage.graph.tinkerpop.conversion.ElementConverterFactory;
 import nl.knaw.huygens.timbuctoo.vre.VRECollection;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RegularSearchResultMapper extends SearchResultMapper {
 
   protected final FullTextSearchFieldFinder fullTextSearchFieldFinder;
+  private Graph graph;
+  private ElementConverterFactory elementConverterFactory;
 
   @Inject
   public RegularSearchResultMapper(Repository repository, SortableFieldFinder sortableFieldFinder, HATEOASURICreator hateoasURICreator, FullTextSearchFieldFinder fullTextSearchFieldFinder,
-      VRECollection vreCollection) {
+                                   VRECollection vreCollection, Graph graph, ElementConverterFactory elementConverterFactory) {
     super(repository, sortableFieldFinder, hateoasURICreator, vreCollection);
     this.fullTextSearchFieldFinder = fullTextSearchFieldFinder;
+    this.graph = graph;
+    this.elementConverterFactory = elementConverterFactory;
   }
 
   RegularSearchResultMapper(Repository repository, SortableFieldFinder sortableFieldFinder, HATEOASURICreator hateoasURICreator, FullTextSearchFieldFinder fullTextSearchFieldFinder,
-                            VRECollection vreCollection, RangeHelper rangeHelper){
+                            VRECollection vreCollection, RangeHelper rangeHelper) {
     super(repository, sortableFieldFinder, hateoasURICreator, vreCollection, rangeHelper);
     this.fullTextSearchFieldFinder = fullTextSearchFieldFinder;
   }
@@ -66,7 +77,8 @@ public class RegularSearchResultMapper extends SearchResultMapper {
     int end = normalizedStart + normalizedRows;
 
     List<String> idsToRetrieve = ids.subList(normalizedStart, end);
-    List<T> results = retrieveEntitiesWithRelationsAndDerivedProperties(type, idsToRetrieve, searchResult.getVreId());
+//    List<T> results = retrieveEntitiesWithRelationsAndDerivedProperties(type, idsToRetrieve, searchResult.getVreId());
+    List<T> results = getResults(type, idsToRetrieve, searchResult);
 
     String queryId = searchResult.getId();
 
@@ -85,6 +97,21 @@ public class RegularSearchResultMapper extends SearchResultMapper {
     setNextLink(start, rows, dto, numFound, end, queryId, version);
 
     return dto;
+  }
+
+  private <T extends DomainEntity> List<T> getResults(Class<T> type, List<String> idsToRetrieve, SearchResult searchResult) {
+    VertexConverter<T> vertexConverter = elementConverterFactory.forType(type);
+    List<Vertex> vertices = idsToRetrieve.stream().map(id -> graph.getVertices(Entity.DB_ID_PROP_NAME, id)).flatMap(result -> Lists.newArrayList(result).stream()).collect(Collectors.toList());
+
+    try {
+      List<T> entities = Lists.newArrayList();
+      for (Vertex vertex : vertices) {
+        entities.add(vertexConverter.convertToEntity(vertex));
+      }
+      return entities;
+    } catch (ConversionException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   private <T extends DomainEntity> List<DomainEntityDTO> createRefs(Class<T> type, List<T> entities) {
